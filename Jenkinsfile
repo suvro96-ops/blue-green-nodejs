@@ -33,6 +33,12 @@ stage('Switch Traffic') {
     }
   }
 }
+stage('Smoke Test') {
+  steps {
+    echo 'Running health checks...'
+    // Add curl or kubectl readiness probe here
+  }
+}
 stages {
     stage('Build Blue') {
             steps {
