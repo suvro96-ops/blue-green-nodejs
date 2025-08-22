@@ -1,5 +1,13 @@
 pipeline {
   agent any
+  stages {
+    stage('Build') {
+      steps {
+        echo 'Building...'
+      }
+    }
+  }
+}
 
   environment {
     BLUE_IMAGE = "nodejs-blue:v1"
