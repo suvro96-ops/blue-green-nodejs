@@ -5,33 +5,25 @@ pipeline {
         IMAGE_NAME = 'nodejs-blue'
         IMAGE_TAG = 'v1'
     }
-    stage('Build Docker Image') {
-  steps {
-    script {
-      def targetEnv = (env.BUILD_NUMBER.toInteger() % 2 == 0) ? "blue" : "green"
-      def imageTag = "nodejs-${targetEnv}:v${env.BUILD_NUMBER}"
-      echo "Building Docker image for ${targetEnv} → ${imageTag}"
-      bat "docker build -t ${imageTag} ./${targetEnv}"
+ stages {
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t my-app .'
+            }
+        }
+
+        stage('Deploy with Helm') {
+            steps {
+                bat 'helm upgrade my-app ./chart'
+            }
+        }
+
+        stage('Switch Traffic') {
+            steps {
+                echo 'Switching traffic to new deployment...'
+            }
+        }
     }
-  }
-}
-stage('Deploy with Helm') {
-  steps {
-    script {
-      def targetEnv = (env.BUILD_NUMBER.toInteger() % 2 == 0) ? "blue" : "green"
-      echo "Deploying to Kubernetes namespace: ${targetEnv}"
-      bat "helm upgrade --install nodejs-app-${targetEnv} ./helm-chart -n ${targetEnv} --create-namespace"
-    }
-  }
-}
-stage('Switch Traffic') {
-  steps {
-    script {
-      def targetEnv = (env.BUILD_NUMBER.toInteger() % 2 == 0) ? "blue" : "green"
-      echo "Switching traffic to ${targetEnv}..."
-      bat "kubectl patch svc nodejs-app-live -n live -p '{\"spec\": {\"selector\": {\"env\": \"${targetEnv}\"}}}'"
-    }
-  }
 }
 stage('Smoke Test') {
   steps {
