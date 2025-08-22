@@ -5,4 +5,12 @@ controller:
   persistence:
     enabled: true
     existingClaim: jenkins-pv-claim
+    appName: nodejs-app
+image:
+  repository: your-dockerhub-username/nodejs-app
+  tag: latest
+service:
+  type: ClusterIP
+  port: 3000
+
 
