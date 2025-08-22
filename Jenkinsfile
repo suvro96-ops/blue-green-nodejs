@@ -1,30 +1,34 @@
-<<<<<<< HEAD
 pipeline {
   agent any
 
+  environment {
+    BLUE_IMAGE = "nodejs-blue:v1"
+    GREEN_IMAGE = "nodejs-green:v1"
+  }
+
   stages {
-    stage('Build') {
+    stage('Build Blue Image') {
       steps {
-        echo 'Building Node.js app...'
-        sh 'npm install'
+        echo 'Building Blue Docker Image...'
+        sh 'docker build -t $BLUE_IMAGE ./blue'
       }
     }
 
-    stage('Test') {
+    stage('Build Green Image') {
       steps {
-        echo 'Running tests...'
-        sh 'npm test'
+        echo 'Building Green Docker Image...'
+        sh 'docker build -t $GREEN_IMAGE ./green'
       }
     }
 
-    stage('Deploy') {
+    stage('Deploy to Kubernetes') {
       steps {
-        echo 'Deploying to Kubernetes...'
-        sh 'helm upgrade --install nodejs-app ./helm-chart -n blue-green'
+        script {
+          def targetEnv = (env.BUILD_NUMBER.toInteger() % 2 == 0) ? "blue" : "green"
+          echo "Deploying to ${targetEnv} environment..."
+          sh "helm upgrade --install nodejs-app-${targetEnv} ./helm-chart -n ${targetEnv}"
+        }
       }
     }
   }
 }
-=======
-pipeline { agent any } 
->>>>>>> 13179f3 (Add Helm deployment stage)
