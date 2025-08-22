@@ -6,20 +6,17 @@ pipeline {
     GREEN_IMAGE = "nodejs-green:v1"
   }
 
-  stages {
-    stage('Build Blue Image') {
-      steps {
-        echo 'Building Blue Docker Image...'
-        sh 'docker build -t $BLUE_IMAGE ./blue'
-      }
-    }
+stage('Build Blue Image') {
+  steps {
+    bat 'docker build -t nodejs-blue:v1 ./blue'
+  }
+}
 
-    stage('Build Green Image') {
-      steps {
-        echo 'Building Green Docker Image...'
-        sh 'docker build -t $GREEN_IMAGE ./green'
-      }
-    }
+stage('Build Green Image') {
+  steps {
+    bat 'docker build -t nodejs-green:v1 ./green'
+  }
+}
 
     stage('Deploy to Kubernetes') {
       steps {
