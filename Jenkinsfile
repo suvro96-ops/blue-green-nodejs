@@ -7,13 +7,13 @@ pipeline {
     }
  stages {
         stage('Build Docker Image') {
-            steps {
+            script {
                 bat 'docker build -t my-app .'
             }
         }
 
         stage('Deploy with Helm') {
-            steps {
+            script {
                 bat 'helm upgrade my-app ./chart'
             }
         }
@@ -33,13 +33,13 @@ stage('Smoke Test') {
 }
 stages {
     stage('Build Blue') {
-            steps {
+            script {
                 bat "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./blue"
             }
         }
 
         stage('Build Green') {
-            steps {
+            script {
                 bat "docker build -t nodejs-green:v1 ./green"
             }
         }
