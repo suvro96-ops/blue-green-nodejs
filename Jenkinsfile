@@ -15,6 +15,16 @@ pipeline {
     }
   }
 }
+stage('Deploy with Helm') {
+  steps {
+    script {
+      def targetEnv = (env.BUILD_NUMBER.toInteger() % 2 == 0) ? "blue" : "green"
+      echo "Deploying to Kubernetes namespace: ${targetEnv}"
+      bat "helm upgrade --install nodejs-app-${targetEnv} ./helm-chart -n ${targetEnv} --create-namespace"
+    }
+  }
+}
+
 stages {
     stage('Build Blue') {
             steps {
