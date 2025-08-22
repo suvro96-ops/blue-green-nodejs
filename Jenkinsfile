@@ -24,7 +24,15 @@ stage('Deploy with Helm') {
     }
   }
 }
-
+stage('Switch Traffic') {
+  steps {
+    script {
+      def targetEnv = (env.BUILD_NUMBER.toInteger() % 2 == 0) ? "blue" : "green"
+      echo "Switching traffic to ${targetEnv}..."
+      bat "kubectl patch svc nodejs-app-live -n live -p '{\"spec\": {\"selector\": {\"env\": \"${targetEnv}\"}}}'"
+    }
+  }
+}
 stages {
     stage('Build Blue') {
             steps {
