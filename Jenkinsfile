@@ -3,7 +3,9 @@ pipeline {
 
   environment {
     BLUE_IMAGE = "nodejs-blue:v1"
+    bat "docker build -t nodejs-blue:v1 ./blue"
     GREEN_IMAGE = "nodejs-green:v1"
+    bat "docker build -t nodejs-green:v1 ./green"
     HELM_CHART_PATH = "./helm-chart"
   }
 
