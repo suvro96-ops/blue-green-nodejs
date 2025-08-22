@@ -1,0 +1,8 @@
+controller:
+  admin.username: admin
+  admin.password: DqJQ2RpZ3vLzSGBuVPJPW
+  serviceType: NodePort
+  persistence:
+    enabled: true
+    existingClaim: jenkins-pv-claim
+
