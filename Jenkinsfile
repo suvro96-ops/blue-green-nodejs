@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 pipeline {
   agent any
 
@@ -24,3 +25,6 @@ pipeline {
     }
   }
 }
+=======
+pipeline { agent any } 
+>>>>>>> 13179f3 (Add Helm deployment stage)
