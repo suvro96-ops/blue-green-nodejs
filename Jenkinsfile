@@ -6,7 +6,6 @@ pipeline {
         echo 'Building...'
       }
     }
-
     stage('Deploy') {
       steps {
         script {
@@ -16,8 +15,7 @@ pipeline {
     }
   }
 }
-
-  environment {
+environment {
     BLUE_IMAGE = "nodejs-blue:v1"
     GREEN_IMAGE = "nodejs-green:v1"
   }
@@ -33,8 +31,7 @@ stage('Build Green Image') {
     bat 'docker build -t nodejs-green:v1 ./green'
   }
 }
-
-    stage('Deploy to Kubernetes') {
+stage('Deploy to Kubernetes') {
       steps {
         script {
           def targetEnv = (env.BUILD_NUMBER.toInteger() % 2 == 0) ? "blue" : "green"
